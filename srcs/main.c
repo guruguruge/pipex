@@ -10,27 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/pipex.h"
 
-void	find_path(t_pipex *t_pipex);
-void	prepare_pipe(t_pipex *t_pipex);
-void	execute_cmds(t_pipex *t_pipex);
-void	cleanup_execution(t_pipex *t_pipex);
-
-void	find_path(t_pipex *t_pipex)
+void	find_path(t_pipex *pipex)
 {
+	int	j;
+
+	j = 0;
+	get_rawpath(pipex);
+	while (j < pipex->cmd_num)
+	{
+		convert_rawpath(pipex, j);
+		j++;
+	}
 }
 
-void	prepare_pipe(t_pipex *t_pipex)
+void	execute_cmds(t_pipex *pipex)
 {
-}
+	int	i;
 
-void	execute_cmds(t_pipex *t_pipex)
-{
-}
-
-void	cleanup_execution(t_pipex *t_pipex)
-{
+	i = 0;
+	while (i < pipex->cmd_num)
+	{
+		if (i == 0)
+			init_execution(pipex, i);
+		else if (i == pipex->cmd_num - 1)
+			final_execution(pipex, i);
+		else
+			general_execution(pipex, i);
+		i++;
+	}
+	wait_children(pipex);
 }
 
 void	handle_args(int ac, char **av, char **envp, t_pipex *pipex)
@@ -40,12 +50,18 @@ void	handle_args(int ac, char **av, char **envp, t_pipex *pipex)
 	pipex->cmd_num = ac - 3;
 	pipex->envp = envp;
 	pipex->cmds = malloc(sizeof(t_cmd) * pipex->cmd_num);
+	if (!pipex->cmds)
+		cleanup_execution(pipex);
 	i = 0;
 	while (i < pipex->cmd_num)
 	{
 		pipex->cmds[i].args = ft_split(av[i + 2], ' ');
+		if (!pipex->cmds[i].args)
+			cleanup_execution(pipex);
 		i++;
 	}
+	pipex->infile = av[1];
+	pipex->outfile = av[ac - 1];
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -53,11 +69,12 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	*pipex;
 
 	if (argc < 5)
-		return (1);
+		return (INVALID_INPUT);
 	pipex = malloc(sizeof(t_pipex));
+	if (!pipex)
+		bash_error_exit("malloc", pipex);
 	handle_args(argc, argv, envp, pipex);
 	find_path(pipex);
-	prepare_pipe(pipex);
 	execute_cmds(pipex);
 	cleanup_execution(pipex);
 	return (0);

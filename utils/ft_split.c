@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../includes/libft.h"
 
 static void	free_all(size_t i, char **result, size_t **word_se)
 {
