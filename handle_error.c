@@ -14,7 +14,7 @@
 
 void	validate_files(t_pipex *pipex)
 {
-	int fd;
+	int	fd;
 
 	fd = open(pipex->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
