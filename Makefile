@@ -28,6 +28,7 @@ SRCS = \
 	cleanup.c \
 	execute_cmds_utils.c \
 	execute_cmds.c \
+	handle_error.c \
 	cleanup.c \
 	find_path.c \
 	main.c
