@@ -25,14 +25,14 @@ void	init_execution(t_pipex *pipex, int i)
 	if (pid == 0)
 	{
 		infile_fd = open(pipex->infile, O_RDONLY);
-		if (infile_fd == -1)
-			child_error_exit(pipex->infile);
 		dup2(infile_fd, STDIN_FILENO);
 		dup2(pipefd[1], STDOUT_FILENO);
 		close_pipe(pipefd[0], pipefd[1]);
 		close(infile_fd);
-		execve(pipex->cmds[0].path, pipex->cmds[0].args, pipex->envp);
-		child_error_exit(pipex->cmds[i].args[0]);
+		if (pipex->cmds[i].no_cmd)
+			cmd_not_found(pipex->cmds[i].args[0]);
+		if (!pipex->error_flag || !pipex->cmds[i].no_cmd)
+			execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
 	}
 	else
 	{
@@ -54,8 +54,10 @@ void	general_execution(t_pipex *pipex, int i)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close_pipe(pipefd[0], pipefd[1]);
 		close(pipex->prev_pipefd[0]);
-		execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
-		child_error_exit(pipex->cmds[i].args[0]);
+		if (pipex->cmds[i].no_cmd)
+			cmd_not_found(pipex->cmds[i].args[0]);
+		if (!pipex->error_flag || !pipex->cmds[i].no_cmd)
+			execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
 	}
 	else
 	{
@@ -77,13 +79,11 @@ void	final_execution(t_pipex *pipex, int i)
 	if (pid == 0)
 	{
 		outfile_fd = open(pipex->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (outfile_fd == -1)
-			child_error_exit(pipex->outfile);
 		dup2(pipex->prev_pipefd[0], STDIN_FILENO);
 		dup2(outfile_fd, STDOUT_FILENO);
 		close(outfile_fd);
-		execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
-		child_error_exit(pipex->cmds[i].args[0]);
+		if (!pipex->error_flag || !pipex->cmds[i].no_cmd)
+			execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
 	}
 	else
 	{

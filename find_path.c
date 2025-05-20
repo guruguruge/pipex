@@ -70,7 +70,7 @@ void	convert_rawpath(t_pipex *pipex, int j)
 	free(tmp.cmd_temp);
 	if (i != pipex->path_num)
 		return ;
-	bash_error_exit(tmp.cmd_j, pipex);
+	pipex->cmds[j].no_cmd = 1;
 }
 
 // void	check_access(t_pipex *pipex, int j)

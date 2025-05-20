@@ -19,10 +19,21 @@ void	bash_error_exit(char *error_type, t_pipex *pipex)
 	exit(1);
 }
 
+void	bash_error_continue(char *error_type)
+{
+	perror(error_type);
+}
+
 void	child_error_exit(char *error_type)
 {
 	perror(error_type);
 	exit(1);
+}
+
+void	cmd_not_found(char *cmd)
+{
+	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	write(STDERR_FILENO, ": command not found\n", 20);
 }
 
 void	cleanup_execution(t_pipex *pipex)

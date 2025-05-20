@@ -20,7 +20,13 @@ void	find_path(t_pipex *pipex)
 	get_rawpath(pipex);
 	while (j < pipex->cmd_num)
 	{
-		convert_rawpath(pipex, j);
+		if (pipex->cmds[j].args[0])
+			convert_rawpath(pipex, j);
+		else
+		{
+			pipex->cmds[j].args[0] = NULL;
+			pipex->cmds[j].no_cmd = 1;
+		}
 		j++;
 	}
 }
@@ -49,7 +55,7 @@ void	handle_args(int ac, char **av, char **envp, t_pipex *pipex)
 
 	pipex->cmd_num = ac - 3;
 	pipex->envp = envp;
-	pipex->cmds = malloc(sizeof(t_cmd) * pipex->cmd_num);
+	pipex->cmds = ft_calloc(pipex->cmd_num, sizeof(t_cmd));
 	if (!pipex->cmds)
 		cleanup_execution(pipex);
 	i = 0;
@@ -62,6 +68,7 @@ void	handle_args(int ac, char **av, char **envp, t_pipex *pipex)
 	}
 	pipex->infile = av[1];
 	pipex->outfile = av[ac - 1];
+	validate_files(pipex);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -69,8 +76,8 @@ int	main(int argc, char **argv, char **envp)
 	t_pipex	*pipex;
 
 	if (argc < 5)
-		return (INVALID_INPUT);
-	pipex = malloc(sizeof(t_pipex));
+		return (write(2, "Invalid Input\n", 14), INVALID_INPUT);
+	pipex = ft_calloc(1, sizeof(t_pipex));
 	if (!pipex)
 		bash_error_exit("malloc", pipex);
 	handle_args(argc, argv, envp, pipex);
