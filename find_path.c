@@ -33,7 +33,7 @@ void	get_rawpath(t_pipex *pipex)
 	while (envp[i] && (ft_strncmp(envp[i], "PATH=", 5) != 0))
 		i++;
 	if (!envp[i])
-		bash_error_exit("PATH not found", pipex);
+		return ;
 	raw_path = ft_strdup(envp[i] + 5);
 	if (!raw_path)
 		bash_error_exit("malloc", pipex);

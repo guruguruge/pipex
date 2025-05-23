@@ -20,9 +20,15 @@ void	validate_files(t_pipex *pipex)
 	if (fd == -1)
 	{
 		pipex->error_flag = OUT_FILE_ERROR;
+		close(fd);
 		bash_error_continue(pipex->outfile);
 	}
+	close(fd);
 	fd = open(pipex->infile, O_RDONLY);
 	if (fd == -1)
+	{
+		close(fd);
 		bash_error_exit(pipex->infile, pipex);
+	}
+	close(fd);
 }

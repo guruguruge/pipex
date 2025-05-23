@@ -12,9 +12,6 @@
 
 #include "pipex.h"
 
-pid_t	pipe_and_fork(int *pipefd, t_pipex *pipex);
-void	close_pipe(int pipe1, int pipe2);
-
 void	init_execution(t_pipex *pipex, int i)
 {
 	int		pipefd[2];
