@@ -31,7 +31,7 @@ void	init_execution(t_pipex *pipex, int i)
 		close(infile_fd);
 		if (pipex->cmds[i].no_cmd)
 			cmd_not_found(pipex->cmds[i].args[0]);
-		if (!pipex->error_flag || !pipex->cmds[i].no_cmd)
+		if (!pipex->error_flag && !pipex->cmds[i].no_cmd)
 			execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
 	}
 	else
@@ -56,7 +56,7 @@ void	general_execution(t_pipex *pipex, int i)
 		close(pipex->prev_pipefd[0]);
 		if (pipex->cmds[i].no_cmd)
 			cmd_not_found(pipex->cmds[i].args[0]);
-		if (!pipex->error_flag || !pipex->cmds[i].no_cmd)
+		if (!pipex->error_flag && !pipex->cmds[i].no_cmd)
 			execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
 	}
 	else
@@ -82,7 +82,7 @@ void	final_execution(t_pipex *pipex, int i)
 		dup2(pipex->prev_pipefd[0], STDIN_FILENO);
 		dup2(outfile_fd, STDOUT_FILENO);
 		close(outfile_fd);
-		if (!pipex->error_flag || !pipex->cmds[i].no_cmd)
+		if (!pipex->error_flag && !pipex->cmds[i].no_cmd)
 			execve(pipex->cmds[i].path, pipex->cmds[i].args, pipex->envp);
 	}
 	else

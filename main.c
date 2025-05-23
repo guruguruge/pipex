@@ -21,7 +21,12 @@ void	find_path(t_pipex *pipex)
 	while (j < pipex->cmd_num)
 	{
 		if (pipex->cmds[j].args[0])
-			convert_rawpath(pipex, j);
+		{
+			if (pipex->cmds[j].args[0][0] == '/')
+				convert_fullpath(pipex, j);
+			else
+				convert_rawpath(pipex, j);
+		}
 		else
 		{
 			pipex->cmds[j].args[0] = NULL;

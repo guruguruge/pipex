@@ -65,6 +65,7 @@ void		find_path(t_pipex *t_pipex);
 void		get_rawpath(t_pipex *pipex);
 void		validate_files(t_pipex *pipex);
 void		convert_rawpath(t_pipex *pipex, int i);
+void		convert_fullpath(t_pipex *pipex, int j);
 
 void		execute_cmds(t_pipex *t_pipex);
 

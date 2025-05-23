@@ -73,6 +73,25 @@ void	convert_rawpath(t_pipex *pipex, int j)
 	pipex->cmds[j].no_cmd = 1;
 }
 
+void	convert_fullpath(t_pipex *pipex, int j)
+{
+	t_temp	tmp;
+
+	tmp.cmd_temp = ft_strdup(pipex->cmds[j].args[0]);
+	if (!tmp.cmd_temp)
+		bash_error_exit("malloc", pipex);
+	if (!access(tmp.cmd_temp, X_OK))
+	{
+		pipex->cmds[j].path = tmp.cmd_temp;
+		return ;
+	}
+	else
+	{
+		free(tmp.cmd_temp);
+		pipex->cmds[j].no_cmd = 1;
+	}
+}
+
 // void	check_access(t_pipex *pipex, int j)
 // {
 // 	int i;
