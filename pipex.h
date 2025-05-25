@@ -57,10 +57,9 @@ void		bash_error_exit(char *error_type, t_pipex *pipex);
 void		bash_error_continue(char *error_type);
 void		child_error_exit(char *error_type);
 
-void		cmd_not_found(char *cmd);
+void		cmd_not_found(char *cmd, t_pipex *pipex);
 
 void		cleanup_execution(t_pipex *pipex);
-
 void		find_path(t_pipex *t_pipex);
 void		get_rawpath(t_pipex *pipex);
 void		validate_files(t_pipex *pipex);

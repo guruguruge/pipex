@@ -89,5 +89,8 @@ int	main(int argc, char **argv, char **envp)
 	find_path(pipex);
 	execute_cmds(pipex);
 	cleanup_execution(pipex);
-	return (0);
+	if (pipex->error_flag)
+		return (1);
+	else
+		return (0);
 }
