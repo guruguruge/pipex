@@ -12,36 +12,6 @@
 
 #include "pipex.h"
 
-void	bash_error_exit(char *error_type, t_pipex *pipex)
-{
-	write(STDERR_FILENO, "bash: ", 6);
-	perror(error_type);
-	cleanup_execution(pipex);
-	exit(1);
-}
-
-void	bash_error_continue(char *error_type)
-{
-	write(STDERR_FILENO, "bash: ", 6);
-	perror(error_type);
-}
-
-void	child_error_exit(char *error_type)
-{
-	write(STDERR_FILENO, "bash: ", 6);
-	perror(error_type);
-	exit(1);
-}
-
-void	cmd_not_found(char *cmd, t_pipex *pipex)
-{
-	write(STDERR_FILENO, "bash: ", 6);
-	write(STDERR_FILENO, cmd, ft_strlen(cmd));
-	write(STDERR_FILENO, ": command not found\n", 20);
-	cleanup_execution(pipex);
-	exit(1);
-}
-
 void	cleanup_execution(t_pipex *pipex)
 {
 	int	i;
